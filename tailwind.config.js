@@ -5,8 +5,16 @@ export default {
     "./src/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
-    extend: {},
+    extend: {
+        maxWidth: {
+        '100': '25rem',
+        '104': '26rem',
+        '108': '27rem',
+      },
+    },
   },
-  plugins: [],
+  plugins: [
+    require('daisyui'),
+  ],
 }
 
