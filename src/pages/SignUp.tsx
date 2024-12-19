@@ -1,3 +1,6 @@
+import { NavLink } from "react-router";
+import SignUpImage from "../assets/sign_up_side_image.png";
+
 function SignUp() {
   return (
     <main className="h-screen w-screen flex items-center">
@@ -40,19 +43,43 @@ function SignUp() {
                 clipRule="evenodd"
               />
             </svg>
-            <input type="password" className="grow" value="password" />
+            <input type="password" className="grow" placeholder="Password" />
+          </label>
+          <label className="input input-bordered flex items-center gap-2 w-full">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+              className="h-4 w-4 opacity-70"
+            >
+              <path
+                fillRule="evenodd"
+                d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <input
+              type="password"
+              className="grow"
+              placeholder="Confirm Password"
+            />
           </label>
 
           <button className="btn">Sign Up</button>
+          <div className="flex items-center">
+            <span className="mr-2">Has an account?</span>
+            <NavLink to="/login" className="link font-bold">
+              Login
+            </NavLink>
+          </div>
         </div>
       </section>
 
-      <div
-        className="hidden bg-cover lg:block lg:w-2/5"
-        style={{
-          backgroundImage: `url("https://images.unsplash.com/photo-1494621930069-4fd4b2e24a11?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=715&q=80")`,
-        }}
-      ></div>
+      <img
+        src={SignUpImage}
+        className="max-w-[60%] h-full"
+        alt="Kitty using some screens"
+      />
     </main>
   );
 }
