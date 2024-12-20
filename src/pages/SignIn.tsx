@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import * as yup from "yup";
 import LoginImage from "../assets/login_side_image.webp";
 
@@ -15,6 +15,7 @@ const validationSchema = yup.object({
 });
 
 function SignIn() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -25,6 +26,7 @@ function SignIn() {
 
   const handleClickSubmit = (data: SubmitSignInData) => {
     console.log(data);
+    navigate("/tasks");
   };
 
   return (
