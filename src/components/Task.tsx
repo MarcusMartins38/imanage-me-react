@@ -13,7 +13,7 @@ const Task: React.FC<TaskProps> = ({
   handleRemoveTask,
   ...rest
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const [description, setDescription] = useState(task.description);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -27,11 +27,11 @@ const Task: React.FC<TaskProps> = ({
         title: task.title,
       });
     }
-    setIsOpen(false);
+    setIsEditOpen(false);
   };
 
   const handleCancelEdit = () => {
-    setIsOpen(false);
+    setIsEditOpen(false);
     setDescription(task.description);
   };
 
@@ -55,7 +55,7 @@ const Task: React.FC<TaskProps> = ({
     >
       <div className="flex flex-col items-center justify-start w-full">
         <h5 className="w-full text-[20px] font-bold">{task.title}</h5>
-        {isOpen ? (
+        {isEditOpen ? (
           <textarea
             className="textarea textarea-bordered w-full"
             placeholder="Description"
@@ -69,7 +69,7 @@ const Task: React.FC<TaskProps> = ({
       </div>
       <section className="flex flex-row items-center gap-x-2 ml-4">
         <button
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={() => setIsEditOpen((prev) => !prev)}
           className="btn bg-base-300 border-base-300 min-h-0 h-10 w-10 p-0 hover:bg-blue-500 hover:text-white"
         >
           <svg

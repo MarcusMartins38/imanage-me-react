@@ -2,6 +2,8 @@ import { useState } from "react";
 import Task from "../components/Task";
 import { TaskT } from "../lib/type";
 import Sidebar from "../components/Sidebar";
+import { useSelector } from "react-redux";
+import { RootState } from "@reduxjs/toolkit/query";
 
 const mockTasks = [
   {
@@ -32,7 +34,7 @@ const mockTasks = [
 
 function Tasks() {
   const [tasks, setTasks] = useState(mockTasks);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const isOpen = useSelector((state: RootState) => state.sidebar.isOpen);
 
   const handleRemoveTask = (id: number) => {
     setTasks((prev) => [...prev.filter((task) => task.id !== id)]);
@@ -48,13 +50,13 @@ function Tasks() {
 
   return (
     <main>
-      <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      <Sidebar />
 
       <div
         className={`p-4 transition-all duration-300`}
         style={{
-          width: isCollapsed ? `calc(100% - 64px)` : `calc(100% - 256px)`,
-          marginLeft: isCollapsed ? "64px" : "256px",
+          width: isOpen ? `calc(100% - 256px)` : `calc(100% - 64px)`,
+          marginLeft: isOpen ? "256px" : "64px",
         }}
       >
         {tasks.map((task) => (
