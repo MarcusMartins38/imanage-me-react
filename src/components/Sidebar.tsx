@@ -82,7 +82,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
           <NavLink
             to="/settings"
-            className="menu-item flex items-center w-full h-8 rounded-lg px-1 transition-all absolute bottom-0 max-w-60 duration-300 hover:bg-zinc-200"
+            className={`menu-item flex items-center w-full h-8 rounded-lg px-1 transition-all absolute bottom-0 ${isCollapsed ? "max-w-12" : "max-w-60"} duration-300 hover:bg-zinc-200`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

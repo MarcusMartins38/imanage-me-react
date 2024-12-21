@@ -50,7 +50,7 @@ const Task: React.FC<TaskProps> = ({
 
   return (
     <div
-      className="card bg-base-200 rounded-box flex flex-row h-min-20 h-auto place-items-center p-4 my-4"
+      className="card bg-base-200 rounded-box flex flex-row h-min-20 h-auto place-items-center px-4 py-2 my-4"
       {...rest}
     >
       <div className="flex flex-col items-center justify-start w-full">
