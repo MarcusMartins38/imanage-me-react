@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Task from "../components/Task";
 import { TaskT } from "../lib/type";
+import Sidebar from "../components/Sidebar";
 
 const mockTasks = [
   {
@@ -31,6 +32,7 @@ const mockTasks = [
 
 function Tasks() {
   const [tasks, setTasks] = useState(mockTasks);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleRemoveTask = (id: number) => {
     setTasks((prev) => [...prev.filter((task) => task.id !== id)]);
@@ -46,7 +48,14 @@ function Tasks() {
 
   return (
     <main>
-      <div className="p-4">
+      <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      <div
+        className={`p-4 transition-all duration-300`}
+        style={{
+          width: isCollapsed ? `calc(100% - 64px)` : `calc(100% - 256px)`,
+          marginLeft: isCollapsed ? "64px" : "256px",
+        }}
+      >
         {tasks.map((task) => (
           <Task
             key={task.id}
