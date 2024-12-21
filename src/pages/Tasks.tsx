@@ -44,14 +44,14 @@ function Tasks() {
             key={task.id}
             className="card bg-base-200 rounded-box flex flex-row h-min-20 h-auto place-items-center p-4 my-4"
           >
-            <div className="flex flex-col items-center justify-start ">
+            <div className="flex flex-col items-center justify-start w-full">
               <h5 className="w-full text-[20px] font-bold">{task.title}</h5>
               <p className="w-full text-[14px]">{task.description}</p>
             </div>
             <section className="flex flex-row items-center gap-x-2">
               <button
                 onClick={() => handleEditClick(task.id)}
-                className="btn bg-base-300 border-base-300 hover:bg-blue-500 hover:text-white"
+                className="btn bg-base-300 border-base-300 min-h-0 h-10 w-10 p-0 hover:bg-blue-500 hover:text-white"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +70,7 @@ function Tasks() {
               </button>
               <button
                 onClick={() => handleRemoveClick(task.id)}
-                className="btn bg-base-300 border-base-300 hover:bg-red-500 hover:text-white"
+                className="btn bg-base-300 border-base-300 min-h-0 h-10 w-10 p-0 hover:bg-red-500 hover:text-white"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
