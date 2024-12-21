@@ -5,7 +5,6 @@ import { closeSidebar, openSidebar } from "../slices/sidebarSlice";
 
 const Sidebar = () => {
   const isOpen = useSelector((state: RootState) => state.sidebar.isOpen);
-  console.log({ isOpen });
   const dispatch = useDispatch();
 
   const handleToggleClick = () => {
@@ -126,9 +125,9 @@ const Sidebar = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 className={`icon icon-tabler icons-tabler-outline icon-tabler-logout-2 text-red-600 ${!isOpen ? "m-auto ml-[6px]" : "mr-1 ml-[-2px]"}`}
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
