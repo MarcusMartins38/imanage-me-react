@@ -21,6 +21,9 @@ const Sidebar = () => {
         className={`bg-base-200 transition-all duration-300 ${
           isOpen ? "w-64" : "w-16"
         }`}
+        style={{
+          borderRadius: "0 24px 24px 0",
+        }}
       >
         <section className="p-2">
           <button
@@ -116,7 +119,7 @@ const Sidebar = () => {
             </NavLink>
             <NavLink
               to="/logout"
-              className={`menu-item flex items-center w-full h-10 rounded-lg px-1 transition-all hover:bg-red-200 ${isOpen ? "max-w-60" : "max-w-12"} duration-300 hover:bg-zinc-200`}
+              className={`menu-item flex items-center w-full h-10 rounded-lg px-1 transition-all group hover:bg-red-500 ${isOpen ? "max-w-60" : "max-w-12"} duration-300`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -128,14 +131,18 @@ const Sidebar = () => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={`icon icon-tabler icons-tabler-outline icon-tabler-logout-2 text-red-600 ${!isOpen ? "m-auto ml-[6px]" : "mr-1 ml-[-2px]"}`}
+                className={`icon icon-tabler icons-tabler-outline icon-tabler-logout-2 text-red-600 group-hover:text-white duration-300 transition-all ${!isOpen ? "m-auto ml-[6px]" : "mr-1 ml-[-2px]"}`}
               >
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M10 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" />
                 <path d="M15 12h-12l3 -3" />
                 <path d="M6 15l-3 -3" />
               </svg>
-              {isOpen && <span>Settings</span>}
+              {isOpen && (
+                <span className="text-red-600 group-hover:text-white duration-300 transition-all">
+                  Logout
+                </span>
+              )}
             </NavLink>
           </div>
         </div>
