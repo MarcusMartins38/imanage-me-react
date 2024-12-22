@@ -4,6 +4,7 @@ import SignUp from "./pages/SignUp";
 import Tasks from "./pages/Tasks";
 import { Provider } from "react-redux";
 import { store } from "./store";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/login" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/tasks" element={<Tasks />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </BrowserRouter>
     </Provider>

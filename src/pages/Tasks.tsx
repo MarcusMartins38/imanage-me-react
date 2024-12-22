@@ -54,7 +54,7 @@ function Tasks() {
   };
 
   return (
-    <main className="overflow-y-hidden">
+    <main>
       <Sidebar />
 
       <div
