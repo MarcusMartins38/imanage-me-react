@@ -4,6 +4,7 @@ import { TaskT } from "../lib/type";
 import Sidebar from "../components/Sidebar";
 import { useSelector } from "react-redux";
 import { RootState } from "@reduxjs/toolkit/query";
+import CreateTaskModal from "../components/CreateTaskModal";
 
 const mockTasks = [
   {
@@ -48,8 +49,12 @@ function Tasks() {
     );
   };
 
+  const handleSaveClick = (newTask: TaskT) => {
+    setTasks((prev) => [newTask, ...prev]);
+  };
+
   return (
-    <main>
+    <main className="overflow-y-hidden">
       <Sidebar />
 
       <div
@@ -59,6 +64,16 @@ function Tasks() {
           marginLeft: isOpen ? "256px" : "64px",
         }}
       >
+        <header className="flex items-center justify-end w-full">
+          <button
+            className="btn bg-zinc-800 text-white hover:bg-zinc-600"
+            onClick={() =>
+              document.getElementById("create_task_modal").showModal()
+            }
+          >
+            Create Task
+          </button>
+        </header>
         {tasks.map((task) => (
           <Task
             key={task.id}
@@ -68,6 +83,8 @@ function Tasks() {
           />
         ))}
       </div>
+
+      <CreateTaskModal handleSaveTask={handleSaveClick} />
     </main>
   );
 }
