@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router";
 import * as yup from "yup";
 import LoginImage from "../assets/login_side_image.webp";
+import { useCookies } from "react-cookie";
 
 type SubmitSignInData = {
   email: string;
@@ -15,6 +16,7 @@ const validationSchema = yup.object({
 });
 
 function SignIn() {
+  const [_, setCookie] = useCookies(["userAuth"]);
   const navigate = useNavigate();
   const {
     register,
@@ -24,8 +26,21 @@ function SignIn() {
     resolver: yupResolver(validationSchema),
   });
 
-  const handleClickSubmit = (data: SubmitSignInData) => {
-    console.log(data);
+  const handleClickSubmit = async (data: SubmitSignInData) => {
+    const response = await fetch("http://localhost:3333/api/user/sign-in", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: data.email, password: data.password }),
+    });
+
+    if (!response.ok) throw new Error("Request it's not ok");
+    const resJson = await response.json();
+
+    setCookie("userAuth", resJson.data.accessToken, {
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 horas a partir de agora
+    });
     navigate("/tasks");
   };
 
