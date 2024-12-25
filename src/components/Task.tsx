@@ -61,7 +61,7 @@ const Task: React.FC<TaskProps> = ({
             placeholder="Description"
             ref={textareaRef}
             onKeyDown={(e) => handleKeyDown(e, task)}
-            value={description}
+            defaultValue={description}
           />
         ) : (
           <p className="w-full text-[14px]">{task.description}</p>

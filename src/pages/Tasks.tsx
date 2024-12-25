@@ -69,7 +69,23 @@ function Tasks() {
     setTasks((prev) => [...prev.filter((task) => task.id !== id)]);
   };
 
-  const handleSaveEditTask = (task: TaskT) => {
+  const handleSaveEditTask = async (task: TaskT) => {
+    const res = await fetch(
+      "http://localhost:3333/api/task/57df540d-acd4-40d4-84b2-b075987a1c95",
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${cookies.userAuth}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...task,
+        }),
+      },
+    );
+
+    if (!res.ok) throw new Error("Error while editing task");
+
     setTasks((prev) =>
       prev.map((prevTask) =>
         prevTask.id === task.id ? { ...task } : prevTask,
