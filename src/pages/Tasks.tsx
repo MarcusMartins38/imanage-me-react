@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Task from "../components/Task";
 import { TaskT } from "../lib/type";
 import Sidebar from "../components/Sidebar";
 import { useSelector } from "react-redux";
 import { RootState } from "@reduxjs/toolkit/query";
 import CreateTaskModal from "../components/CreateTaskModal";
+import { useCookies } from "react-cookie";
 
 const mockTasks = [
   {
@@ -34,10 +35,37 @@ const mockTasks = [
 ];
 
 function Tasks() {
-  const [tasks, setTasks] = useState(mockTasks);
+  const [tasks, setTasks] = useState([]);
+  const [cookies] = useCookies(["userAuth"]);
   const isOpen = useSelector((state: RootState) => state.sidebar.isOpen);
 
-  const handleRemoveTask = (id: number) => {
+  useEffect(() => {
+    const fetchUserTasks = async () => {
+      const res = await fetch("http://localhost:3333/api/task/", {
+        headers: {
+          Authorization: `Bearer ${cookies.userAuth}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("Get Tasks error");
+
+      const resJson = await res.json();
+      console.log(resJson);
+      setTasks(resJson.data);
+    };
+
+    fetchUserTasks();
+  }, []);
+
+  const handleRemoveTask = async (id: number) => {
+    const res = await fetch(`http://localhost:3333/api/task/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${cookies.userAuth}`,
+      },
+    });
+
+    if (!res.ok) throw new Error("Can't delete task");
     setTasks((prev) => [...prev.filter((task) => task.id !== id)]);
   };
 
@@ -49,7 +77,20 @@ function Tasks() {
     );
   };
 
-  const handleSaveClick = (newTask: TaskT) => {
+  const handleSaveClick = async (newTask: TaskT) => {
+    const res = await fetch("http://localhost:3333/api/task/", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${cookies.userAuth}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: newTask.title,
+        description: newTask.description,
+      }),
+    });
+
+    if (!res.ok) throw new Error("Can't create new task");
     setTasks((prev) => [newTask, ...prev]);
   };
 
