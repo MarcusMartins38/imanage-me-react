@@ -1,11 +1,11 @@
+import { RootState } from "@reduxjs/toolkit/query";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useSelector } from "react-redux";
+import CreateTaskModal from "../components/CreateTaskModal";
+import Sidebar from "../components/Sidebar";
 import Task from "../components/Task";
 import { TaskT } from "../lib/type";
-import Sidebar from "../components/Sidebar";
-import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
-import CreateTaskModal from "../components/CreateTaskModal";
-import { useCookies } from "react-cookie";
 
 function Tasks() {
   const [tasks, setTasks] = useState([]);
@@ -16,7 +16,7 @@ function Tasks() {
     const fetchUserTasks = async () => {
       const res = await fetch("http://localhost:3333/api/task/", {
         headers: {
-          Authorization: `Bearer ${cookies.userAuth}`,
+          Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
         },
       });
 
@@ -34,7 +34,7 @@ function Tasks() {
     const res = await fetch(`http://localhost:3333/api/task/${id}`, {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${cookies.userAuth}`,
+        Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
       },
     });
 
@@ -48,7 +48,7 @@ function Tasks() {
       {
         method: "PATCH",
         headers: {
-          Authorization: `Bearer ${cookies.userAuth}`,
+          Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -70,7 +70,7 @@ function Tasks() {
     const res = await fetch("http://localhost:3333/api/task/", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${cookies.userAuth}`,
+        Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

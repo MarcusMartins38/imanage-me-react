@@ -41,9 +41,13 @@ function SignIn() {
     if (!response.ok) throw new Error("Request it's not ok");
     const resJson = await response.json();
 
-    setCookie("userAuth", resJson.data.accessToken, {
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 horas a partir de agora
-    });
+    setCookie(
+      "userAuth",
+      { accessToken: resJson.data.accessToken, user: resJson.data.user },
+      {
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 horas a partir de agora
+      },
+    );
     dispatch(
       updateUser({
         name: resJson.data.user.name,
