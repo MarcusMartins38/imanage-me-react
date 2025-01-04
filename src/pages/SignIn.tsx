@@ -1,9 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router";
 import * as yup from "yup";
 import LoginImage from "../assets/login_side_image.webp";
-import { useCookies } from "react-cookie";
+import { updateUser } from "../slices/userSlice";
 
 type SubmitSignInData = {
   email: string;
@@ -16,6 +18,7 @@ const validationSchema = yup.object({
 });
 
 function SignIn() {
+  const dispatch = useDispatch();
   const [_, setCookie] = useCookies(["userAuth"]);
   const navigate = useNavigate();
   const {
@@ -41,6 +44,13 @@ function SignIn() {
     setCookie("userAuth", resJson.data.accessToken, {
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 horas a partir de agora
     });
+    dispatch(
+      updateUser({
+        name: resJson.data.user.name,
+        email: resJson.data.user.email,
+        imageUrl: resJson.data.user.imageUrl,
+      }),
+    );
     navigate("/tasks");
   };
 
