@@ -1,11 +1,15 @@
 import { RootState } from "@reduxjs/toolkit/query";
+import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { closeSidebar, openSidebar } from "../slices/sidebarSlice";
+import { updateUser } from "../slices/userSlice";
 
 const Sidebar = () => {
   const isOpen = useSelector((state: RootState) => state.sidebar.isOpen);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [_, __, removeCookie] = useCookies(["userAuth"]);
 
   const handleToggleClick = () => {
     if (isOpen) {
@@ -13,6 +17,12 @@ const Sidebar = () => {
     } else {
       dispatch(openSidebar());
     }
+  };
+
+  const handleLogoutClick = () => {
+    dispatch(updateUser({ name: "", email: "", imageUrl: "" }));
+    removeCookie("userAuth");
+    navigate("/login");
   };
 
   return (
@@ -117,8 +127,9 @@ const Sidebar = () => {
               </svg>
               {isOpen && <span>Settings</span>}
             </NavLink>
-            <NavLink
-              to="/logout"
+            <button
+              type="button"
+              onClick={handleLogoutClick}
               className={`menu-item flex items-center w-full h-10 rounded-lg px-1 transition-all group hover:bg-red-500 ${isOpen ? "max-w-60" : "max-w-12"} duration-300`}
             >
               <svg
@@ -143,7 +154,7 @@ const Sidebar = () => {
                   Logout
                 </span>
               )}
-            </NavLink>
+            </button>
           </div>
         </div>
       </div>
