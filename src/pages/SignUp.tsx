@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import * as yup from "yup";
 import SignUpImage from "../assets/sign_up_side_image.png";
 
@@ -22,6 +22,7 @@ const validationSchema = yup.object({
 });
 
 function SignUp() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -30,8 +31,20 @@ function SignUp() {
     resolver: yupResolver(validationSchema),
   });
 
-  const handleClickSubmit = (data: SubmitSignUpData) => {
-    console.log(data);
+  const handleClickSubmit = async (data: SubmitSignUpData) => {
+    const res = await fetch("http://localhost:3333/api/user/sign-up", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: data.username,
+        email: data.email,
+        password: data.password,
+      }),
+    });
+
+    if (res.ok) navigate("login");
   };
 
   return (
@@ -152,7 +165,7 @@ function SignUp() {
 
       <img
         src={SignUpImage}
-        className="max-w-[60%] h-full"
+        className="max-w-[60%] w-full h-full"
         alt="Kitty using some screens"
       />
     </main>
