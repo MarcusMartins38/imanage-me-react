@@ -44,7 +44,7 @@ function SignUp() {
       }),
     });
 
-    if (res.ok) navigate("login");
+    if (res.ok) navigate("/login");
   };
 
   return (
