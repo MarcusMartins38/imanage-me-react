@@ -8,7 +8,7 @@ import Task from "../components/Task";
 import { TaskT } from "../lib/type";
 
 function Tasks() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<TaskT | []>([]);
   const [cookies] = useCookies(["userAuth"]);
   const isOpen = useSelector((state: RootState) => state.sidebar.isOpen);
 
@@ -23,7 +23,6 @@ function Tasks() {
       if (!res.ok) throw new Error("Get Tasks error");
 
       const resJson = await res.json();
-      console.log(resJson);
       setTasks(resJson.data);
     };
 
@@ -66,7 +65,7 @@ function Tasks() {
     );
   };
 
-  const handleSaveClick = async (newTask: TaskT) => {
+  const handleSaveClick = async (newTask: Omit<TaskT, "id">) => {
     const res = await fetch("http://localhost:3333/api/task/", {
       method: "POST",
       headers: {
@@ -80,7 +79,12 @@ function Tasks() {
     });
 
     if (!res.ok) throw new Error("Can't create new task");
-    setTasks((prev) => [newTask, ...prev]);
+
+    const resJson = await res.json();
+    const { id, title, description } = resJson.data;
+    const resNewTask = { id, title, description };
+
+    setTasks((prev) => [resNewTask, ...prev]);
   };
 
   return (

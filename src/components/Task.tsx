@@ -3,7 +3,7 @@ import { TaskT } from "../lib/type";
 
 type TaskProps = {
   task: TaskT;
-  handleRemoveTask: (id: number) => void;
+  handleRemoveTask: (id: string) => void;
   handleSaveEditTask: (task: TaskT) => void;
 };
 

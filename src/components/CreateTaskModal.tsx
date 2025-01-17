@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TaskT } from "../lib/type";
 
 type CreateTaskModalProps = {
-  handleSaveTask: (task: TaskT) => void;
+  handleSaveTask: (task: Omit<TaskT, "id">) => void;
 };
 
 export default function CreateTaskModal({
@@ -19,7 +19,7 @@ export default function CreateTaskModal({
   };
 
   const handleClickSave = () => {
-    handleSaveTask({ id: 5, title, description });
+    handleSaveTask({ title, description });
     closeModal();
   };
 
