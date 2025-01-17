@@ -40,7 +40,7 @@ const Sidebar = () => {
   return (
     <div className="flex h-screen fixed">
       <div
-        className={`bg-base-200 transition-all duration-300 ${
+        className={`bg-base-200 transition-width duration-300 ${
           isOpen ? "w-64" : "w-16"
         }`}
         style={{
