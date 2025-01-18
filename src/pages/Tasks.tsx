@@ -29,7 +29,7 @@ function Tasks() {
     fetchUserTasks();
   }, []);
 
-  const handleRemoveTask = async (id: number) => {
+  const handleRemoveTask = async (id: string) => {
     const res = await fetch(`http://localhost:3333/api/task/${id}`, {
       method: "DELETE",
       headers: {
@@ -72,10 +72,7 @@ function Tasks() {
         Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        title: newTask.title,
-        description: newTask.description,
-      }),
+      body: JSON.stringify(newTask),
     });
 
     if (!res.ok) throw new Error("Can't create new task");

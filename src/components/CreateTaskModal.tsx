@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { TaskT } from "../lib/type";
+import { useForm } from "react-hook-form";
 
 type CreateTaskModalProps = {
   handleSaveTask: (task: Omit<TaskT, "id">) => void;
@@ -8,8 +8,7 @@ type CreateTaskModalProps = {
 export default function CreateTaskModal({
   handleSaveTask,
 }: CreateTaskModalProps) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const { register, handleSubmit } = useForm();
 
   const closeModal = () => {
     const modal = document.getElementById("create_task_modal");
@@ -18,14 +17,12 @@ export default function CreateTaskModal({
     }
   };
 
-  const handleClickSave = () => {
-    handleSaveTask({ title, description });
+  const handleClickSave = (data: Omit<TaskT, "id">) => {
+    handleSaveTask(data);
     closeModal();
   };
 
   const handleClickClose = () => {
-    setTitle("");
-    setDescription("");
     closeModal();
   };
 
@@ -38,29 +35,54 @@ export default function CreateTaskModal({
             <span className="text-[14px] font-bold">Title</span>
             <input
               type="text"
-              name="title"
               id="title"
               className="input input-bordered h-8"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              {...register("title")}
             />
           </label>
-          <label htmlFor="description">
+
+          <label className="my-2" htmlFor="description">
             <span className="text-[14px] font-bold">Description</span>
             <textarea
-              name="description"
               id="description"
               className="textarea textarea-bordered w-full"
               placeholder="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              {...register("description")}
             />
           </label>
+
+          <div className="w-full flex items-center justify-between my-2">
+            <label className="w-[45%]" htmlFor="priority">
+              <span className="text-[14px] font-bold">Priority</span>
+              <select
+                className="select select-bordered select-sm w-full max-w-xs"
+                {...register("priority")}
+              >
+                <option>Very Low</option>
+                <option>Low</option>
+                <option disabled selected>
+                  Medium
+                </option>
+                <option>High</option>
+                <option>VeryHigh</option>
+              </select>
+            </label>
+
+            <label className="w-[45%]" htmlFor="category">
+              <span className="text-[14px] font-bold">Category</span>
+              <input
+                type="text"
+                id="category"
+                className="input input-bordered h-8"
+                {...register("category")}
+              />
+            </label>
+          </div>
         </div>
 
-        <section className="w-full flex items-center justify-end mt-2">
+        <section className="w-full flex items-center justify-end mt-4">
           <button
-            onClick={handleClickSave}
+            onClick={handleSubmit(handleClickSave)}
             className="btn bg-green-500 text-white hover:bg-green-600 mr-2"
           >
             Save
