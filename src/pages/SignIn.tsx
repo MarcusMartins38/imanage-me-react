@@ -6,6 +6,8 @@ import { NavLink, useNavigate } from "react-router";
 import * as yup from "yup";
 import LoginImage from "../assets/login_side_image.webp";
 import { updateUser } from "../slices/userSlice";
+import { GoogleLogin } from "@react-oauth/google";
+import { UserT } from "../lib/type";
 
 type SubmitSignInData = {
   email: string;
@@ -29,6 +31,23 @@ function SignIn() {
     resolver: yupResolver(validationSchema),
   });
 
+  const saveLogedUser = (accessToken: string, user: UserT) => {
+    setCookie(
+      "userAuth",
+      { accessToken: accessToken, user: user },
+      {
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      },
+    );
+    dispatch(
+      updateUser({
+        name: user.name,
+        email: user.email,
+        imageUrl: user.imageUrl,
+      }),
+    );
+  };
+
   const handleClickSubmit = async (data: SubmitSignInData) => {
     const response = await fetch("http://localhost:3333/api/user/sign-in", {
       method: "POST",
@@ -40,22 +59,36 @@ function SignIn() {
 
     if (!response.ok) throw new Error("Request it's not ok");
     const resJson = await response.json();
+    const { accessToken, user } = resJson.data;
 
-    setCookie(
-      "userAuth",
-      { accessToken: resJson.data.accessToken, user: resJson.data.user },
-      {
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 horas a partir de agora
-      },
-    );
-    dispatch(
-      updateUser({
-        name: resJson.data.user.name,
-        email: resJson.data.user.email,
-        imageUrl: resJson.data.user.imageUrl,
-      }),
-    );
+    saveLogedUser(accessToken, user);
     navigate("/tasks");
+  };
+
+  const handleGoogleLogin = async (credentialResponse: any) => {
+    const { credential: idToken } = credentialResponse;
+
+    try {
+      const response = await fetch(
+        "http://localhost:3333/api/user/google-login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ idToken }),
+        },
+      );
+
+      if (!response.ok) throw new Error("Google login failed");
+      const resJson = await response.json();
+      const { accessToken, user } = resJson.data;
+
+      saveLogedUser(accessToken, user);
+      navigate("/tasks");
+    } catch (error) {
+      console.error("Error logging in with Google:", error);
+    }
   };
 
   return (
@@ -69,6 +102,16 @@ function SignIn() {
       <section className="w-full max-w-[40%] px-4">
         <div className="grid gap-y-2 m-auto max-w-104">
           <h3 className="text-2xl font-bold">Login</h3>
+
+          <div className="w-full flex justify-center">
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
+              onError={() => console.error("Google login failed")}
+            />
+          </div>
+
+          <div className="divider">OR</div>
+
           <form
             onSubmit={handleSubmit(handleClickSubmit)}
             className="grid gap-y-2"
