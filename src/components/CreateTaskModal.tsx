@@ -58,13 +58,13 @@ export default function CreateTaskModal({
                 className="select select-bordered select-sm w-full max-w-xs"
                 {...register("priority")}
               >
-                <option>Very Low</option>
-                <option>Low</option>
-                <option disabled selected>
+                <option value={1}>Very Low</option>
+                <option value={2}>Low</option>
+                <option value={3} disabled selected>
                   Medium
                 </option>
-                <option>High</option>
-                <option>VeryHigh</option>
+                <option value={4}>High</option>
+                <option value={5}>VeryHigh</option>
               </select>
             </label>
 

@@ -3,7 +3,7 @@ export type TaskT = {
   title: string;
   description?: string;
   category?: string;
-  priority?: string;
+  priority?: number;
 };
 
 export type UserT = {
