@@ -4,6 +4,7 @@ export type TaskT = {
   description?: string;
   category?: string;
   priority?: number;
+  subTasks: TaskT[];
 };
 
 export type UserT = {

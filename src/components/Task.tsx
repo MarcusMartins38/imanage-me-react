@@ -69,6 +69,23 @@ const Task: React.FC<TaskProps> = ({
           ) : (
             <p className="w-full text-[14px]">{task.description}</p>
           )}
+
+          {task.subTasks.length >= 1 && (
+            <section className="w-full mt-2">
+              <h6 className="font-bold text-[16px]">Sub Tasks</h6>
+              {task.subTasks.map((subTask) => (
+                <div className="flex items-center mt-2">
+                  <input
+                    type="checkbox"
+                    defaultChecked={false}
+                    className="checkbox mr-2"
+                  />
+
+                  <span>{subTask.title}</span>
+                </div>
+              ))}
+            </section>
+          )}
         </div>
 
         <section className="flex flex-row items-center gap-x-2 ml-4">
