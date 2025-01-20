@@ -94,7 +94,7 @@ const Task: React.FC<TaskProps> = ({
             <p className="w-full text-[14px]">{task.description}</p>
           )}
 
-          {subTasks.length >= 1 && (
+          {subTasks?.length >= 1 && (
             <section className="w-full mt-2">
               <h6 className="font-bold text-[16px]">Sub Tasks</h6>
               {subTasks.map((subTask) => (
@@ -108,7 +108,11 @@ const Task: React.FC<TaskProps> = ({
                     className="checkbox mr-2"
                   />
 
-                  <span>{subTask.title}</span>
+                  <span
+                    className={`${subTask.status === "COMPLETED" ? "line-through" : ""}`}
+                  >
+                    {subTask.title}
+                  </span>
                 </div>
               ))}
             </section>
