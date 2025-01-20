@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { TaskT } from "../lib/type";
 import { PRIORITIES } from "../lib/constants";
+import { useCookies } from "react-cookie";
 
 type TaskProps = {
   task: TaskT;
@@ -16,6 +17,8 @@ const Task: React.FC<TaskProps> = ({
 }) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [description, setDescription] = useState(task.description);
+  const [subTasks, setSubTasks] = useState(task.subTasks);
+  const [cookies] = useCookies(["userAuth"]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleClickSaveEdit = (task: TaskT) => {
@@ -49,6 +52,27 @@ const Task: React.FC<TaskProps> = ({
     }
   };
 
+  const handleSubtaskStatusChange = async (
+    subTaskId: string,
+    completed: boolean,
+  ) => {
+    await fetch(`http://localhost:3333/api/task/${subTaskId}/status`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: completed ? "COMPLETED" : "PENDING" }),
+    });
+
+    const updatedSubTasks = subTasks.map((subTask) =>
+      subTask.id === subTaskId
+        ? { ...subTask, status: completed ? "COMPLETED" : "PENDING" }
+        : subTask,
+    );
+    setSubTasks(updatedSubTasks);
+  };
+
   return (
     <div
       className="card bg-red-950 rounded-box h-min-20 h-auto place-items-center my-4 pt-2"
@@ -70,14 +94,17 @@ const Task: React.FC<TaskProps> = ({
             <p className="w-full text-[14px]">{task.description}</p>
           )}
 
-          {task.subTasks.length >= 1 && (
+          {subTasks.length >= 1 && (
             <section className="w-full mt-2">
               <h6 className="font-bold text-[16px]">Sub Tasks</h6>
-              {task.subTasks.map((subTask) => (
+              {subTasks.map((subTask) => (
                 <div className="flex items-center mt-2">
                   <input
                     type="checkbox"
-                    defaultChecked={false}
+                    checked={subTask.status === "COMPLETED"}
+                    onChange={(e) =>
+                      handleSubtaskStatusChange(subTask.id, e.target.checked)
+                    }
                     className="checkbox mr-2"
                   />
 
