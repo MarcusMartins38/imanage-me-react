@@ -1,5 +1,6 @@
 import { TaskT } from "../lib/type";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
+import SubTask from "./SubTask";
 
 type CreateTaskModalProps = {
   handleSaveTask: (task: Omit<TaskT, "id">) => void;
@@ -8,7 +9,11 @@ type CreateTaskModalProps = {
 export default function CreateTaskModal({
   handleSaveTask,
 }: CreateTaskModalProps) {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, control } = useForm();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "subTasks", // Field name in the form state
+  });
 
   const closeModal = () => {
     const modal = document.getElementById("create_task_modal");
@@ -18,12 +23,21 @@ export default function CreateTaskModal({
   };
 
   const handleClickSave = (data: Omit<TaskT, "id">) => {
+    console.log(data);
     handleSaveTask(data);
     closeModal();
   };
 
   const handleClickClose = () => {
     closeModal();
+  };
+
+  const handleAddSubtaskClick = () => {
+    append({ title: "" }); // Add a new empty subtask
+  };
+
+  const handleRemoveSubtaskClick = (index: number) => {
+    remove(index);
   };
 
   return (
@@ -77,6 +91,28 @@ export default function CreateTaskModal({
               />
             </label>
           </div>
+
+          <section className="mt-4">
+            <div className="flex items-center mb-2">
+              <h4 className="text-base font-bold mr-2">Sub Tasks</h4>
+              <button
+                onClick={handleAddSubtaskClick}
+                className="btn bg-green-500 text-white hover:bg-green-600 min-h-0 min-w-0 p-0 h-6 w-6"
+              >
+                +
+              </button>
+            </div>
+
+            {fields.map((subTask, index) => (
+              <SubTask
+                key={subTask.id}
+                fieldName={`subTasks.${index}.title`}
+                className="mt-2"
+                onRemoveClick={() => handleRemoveSubtaskClick(index)}
+                register={register}
+              />
+            ))}
+          </section>
         </div>
 
         <section className="w-full flex items-center justify-end mt-4">
