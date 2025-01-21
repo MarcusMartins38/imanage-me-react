@@ -42,19 +42,16 @@ function Tasks() {
   };
 
   const handleSaveEditTask = async (task: TaskT) => {
-    const res = await fetch(
-      "http://localhost:3333/api/task/57df540d-acd4-40d4-84b2-b075987a1c95",
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...task,
-        }),
+    const res = await fetch(`http://localhost:3333/api/task/${task.id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        ...task,
+      }),
+    });
 
     if (!res.ok) throw new Error("Error while editing task");
 

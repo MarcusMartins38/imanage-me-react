@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { TaskT } from "../lib/type";
 import { PRIORITIES } from "../lib/constants";
 import { useCookies } from "react-cookie";
+import { useForm } from "react-hook-form";
 
 type TaskProps = {
   task: TaskT;
@@ -16,27 +17,24 @@ const Task: React.FC<TaskProps> = ({
   ...rest
 }) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [description, setDescription] = useState(task.description);
   const [subTasks, setSubTasks] = useState(task.subTasks);
   const [cookies] = useCookies(["userAuth"]);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const { register, handleSubmit, getValues, setValue } = useForm();
 
   const handleClickSaveEdit = (task: TaskT) => {
-    if (textareaRef?.current) {
-      const updatedDescription = textareaRef.current.value;
-      setDescription(updatedDescription);
-      handleSaveEditTask({
-        id: task.id,
-        description: updatedDescription,
-        title: task.title,
-      });
-    }
+    handleSaveEditTask({
+      id: task.id,
+      description: getValues("description"),
+      title: getValues("title"),
+    });
     setIsEditOpen(false);
   };
 
   const handleCancelEdit = () => {
     setIsEditOpen(false);
-    setDescription(task.description);
+    setValue("description", task.description); // Reset the form values
+    setValue("title", task.title); // Reset the form title
   };
 
   const handleKeyDown = (
@@ -81,14 +79,26 @@ const Task: React.FC<TaskProps> = ({
     >
       <div className="w-full h-full px-4 py-2 flex flex-row bg-base-200 rounded-box">
         <div className="flex flex-col items-center justify-start w-full">
-          <h5 className="w-full text-[20px] font-bold">{task.title}</h5>
+          {isEditOpen ? (
+            <input
+              type="text"
+              id="title"
+              className="input input-bordered h-8 w-full mb-2"
+              onKeyDown={(e) => handleKeyDown(e, task)}
+              {...register("title")}
+              defaultValue={task.title}
+            />
+          ) : (
+            <h5 className="w-full text-[20px] font-bold">{task.title}</h5>
+          )}
+
           {isEditOpen ? (
             <textarea
               className="textarea textarea-bordered w-full"
               placeholder="Description"
-              ref={textareaRef}
               onKeyDown={(e) => handleKeyDown(e, task)}
-              defaultValue={description}
+              {...register("description")}
+              defaultValue={task.description}
             />
           ) : (
             <p className="w-full text-[14px]">{task.description}</p>
@@ -98,7 +108,7 @@ const Task: React.FC<TaskProps> = ({
             <section className="w-full mt-2">
               <h6 className="font-bold text-[16px]">Sub Tasks</h6>
               {subTasks.map((subTask) => (
-                <div className="flex items-center mt-2">
+                <div key={subTask.id} className="flex items-center mt-2">
                   <input
                     type="checkbox"
                     checked={subTask.status === "COMPLETED"}
