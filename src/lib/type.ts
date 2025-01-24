@@ -1,11 +1,12 @@
 export type TaskT = {
-  id: number;
+  id?: string;
   title: string;
   description?: string;
   category?: string;
   priority?: number;
   status?: string;
-  subTasks: TaskT[];
+  subTasks?: TaskT[];
+  parentTaskId?: string;
 };
 
 export type UserT = {
