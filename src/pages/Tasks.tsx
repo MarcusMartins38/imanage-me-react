@@ -75,8 +75,9 @@ function Tasks() {
     if (!res.ok) throw new Error("Can't create new task");
 
     const resJson = await res.json();
-    const { id, title, description, priority, category } = resJson.data;
-    const resNewTask = { id, title, description, priority, category };
+    const { id, title, description, priority, category, subTasks } =
+      resJson.data;
+    const resNewTask = { id, title, description, priority, category, subTasks };
 
     setTasks((prev) => [resNewTask, ...prev]);
   };
