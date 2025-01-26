@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { TaskT } from "../lib/type";
 import { PRIORITIES } from "../lib/constants";
 import { useCookies } from "react-cookie";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 
 type TaskProps = {
   task: TaskT;
@@ -17,24 +17,23 @@ const Task: React.FC<TaskProps> = ({
   ...rest
 }) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [subTasks, setSubTasks] = useState(task.subTasks);
   const [cookies] = useCookies(["userAuth"]);
 
-  const { register, handleSubmit, getValues, setValue } = useForm();
-
-  const handleClickSaveEdit = (task: TaskT) => {
-    handleSaveEditTask({
-      id: task.id,
-      description: getValues("description"),
-      title: getValues("title"),
-    });
-    setIsEditOpen(false);
-  };
+  const { register, control, getValues, setValue } = useForm({
+    defaultValues: {
+      subTasks: task.subTasks,
+    },
+  });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "subTasks",
+  });
 
   const handleCancelEdit = () => {
     setIsEditOpen(false);
     setValue("description", task.description); // Reset the form values
     setValue("title", task.title); // Reset the form title
+    setValue("subTasks", task.subTasks);
   };
 
   const handleKeyDown = (
@@ -63,12 +62,30 @@ const Task: React.FC<TaskProps> = ({
       body: JSON.stringify({ status: completed ? "COMPLETED" : "PENDING" }),
     });
 
-    const updatedSubTasks = subTasks.map((subTask) =>
+    const updatedSubTasks = fields.map((subTask) =>
       subTask.id === subTaskId
         ? { ...subTask, status: completed ? "COMPLETED" : "PENDING" }
         : subTask,
     );
-    setSubTasks(updatedSubTasks);
+    setValue("subTasks", updatedSubTasks);
+  };
+
+  const handleClickSaveEdit = (task: TaskT) => {
+    const subTasks = getValues("subTasks").map((subTask: any) => ({
+      id: subTask?.id || null,
+      title: subTask.title,
+      parentTaskId: task.id,
+    }));
+
+    const updatedTask = {
+      id: task.id,
+      title: getValues("title"),
+      description: getValues("description"),
+      subTasks: subTasks,
+    };
+
+    handleSaveEditTask(updatedTask);
+    setIsEditOpen(false);
   };
 
   return (
@@ -104,10 +121,21 @@ const Task: React.FC<TaskProps> = ({
             <p className="w-full text-[14px]">{task.description}</p>
           )}
 
-          {subTasks?.length >= 1 && (
+          {fields?.length >= 1 && (
             <section className="w-full mt-2">
-              <h6 className="font-bold text-[16px]">Sub Tasks</h6>
-              {subTasks.map((subTask) => (
+              <div className="flex items-center">
+                <h6 className="font-bold text-[16px] mr-2">Sub Tasks</h6>
+                {isEditOpen && (
+                  <button
+                    onClick={() => append({ parentTaskId: task.id, title: "" })}
+                    className="btn bg-green-500 text-white hover:bg-green-600 min-h-0 min-w-0 p-0 h-6 w-6"
+                  >
+                    +
+                  </button>
+                )}
+              </div>
+
+              {fields.map((subTask, index) => (
                 <div key={subTask.id} className="flex items-center mt-2">
                   <input
                     type="checkbox"
@@ -118,11 +146,20 @@ const Task: React.FC<TaskProps> = ({
                     className="checkbox mr-2"
                   />
 
-                  <span
-                    className={`${subTask.status === "COMPLETED" ? "line-through" : ""}`}
-                  >
-                    {subTask.title}
-                  </span>
+                  {isEditOpen ? (
+                    <input
+                      defaultValue={subTask.title}
+                      type="text"
+                      className="input input-bordered h-8 w-full"
+                      {...register(`subTasks.${index}.title`)}
+                    />
+                  ) : (
+                    <span
+                      className={`${subTask.status === "COMPLETED" ? "line-through" : ""}`}
+                    >
+                      {subTask.title}
+                    </span>
+                  )}
                 </div>
               ))}
             </section>

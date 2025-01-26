@@ -18,7 +18,7 @@ export default function SubTaskInput({
 }: SubTaskProps) {
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <input type="checkbox" checked className="checkbox" />
+      <input type="checkbox" checked readOnly className="checkbox" />
       <button
         onClick={onRemoveClick}
         className="btn bg-red-500 text-white hover:bg-red-600 min-h-0 min-w-0 p-0 h-6 w-6"

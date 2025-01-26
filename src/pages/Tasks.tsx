@@ -55,9 +55,13 @@ function Tasks() {
 
     if (!res.ok) throw new Error("Error while editing task");
 
-    setTasks((prev) =>
-      prev.map((prevTask) =>
-        prevTask.id === task.id ? { ...task } : prevTask,
+    const resJson = await res.json();
+
+    setTasks((prevTasks) =>
+      prevTasks.map((prevTask) =>
+        prevTask.id === task.id
+          ? { ...resJson.data, uniqueKey: Date.now() }
+          : prevTask,
       ),
     );
   };
@@ -105,7 +109,7 @@ function Tasks() {
         </header>
         {tasks.map((task) => (
           <Task
-            key={task.id}
+            key={`${task.id}-${task.uniqueKey || task.id}`}
             task={task}
             handleRemoveTask={handleRemoveTask}
             handleSaveEditTask={handleSaveEditTask}
