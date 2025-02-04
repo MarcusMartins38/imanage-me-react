@@ -23,7 +23,6 @@ export default function CreateTaskModal({
   };
 
   const handleClickSave = (data: Omit<TaskT, "id">) => {
-    console.log(data);
     handleSaveTask(data);
     closeModal();
   };
@@ -108,6 +107,7 @@ export default function CreateTaskModal({
                 key={subTask.id}
                 fieldName={`subTasks.${index}.title`}
                 className="mt-2"
+                checked={true}
                 onRemoveClick={() => handleRemoveSubtaskClick(index)}
                 register={register}
               />

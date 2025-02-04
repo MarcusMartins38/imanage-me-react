@@ -3,6 +3,7 @@ import { TaskT } from "../lib/type";
 import { PRIORITIES } from "../lib/constants";
 import { useCookies } from "react-cookie";
 import { useFieldArray, useForm } from "react-hook-form";
+import SubTaskInput from "./SubTaskInput";
 
 type TaskProps = {
   task: TaskT;
@@ -27,6 +28,7 @@ const Task: React.FC<TaskProps> = ({
   const { fields, append, remove } = useFieldArray({
     control,
     name: "subTasks",
+    keyName: "_id",
   });
 
   const handleCancelEdit = () => {
@@ -136,31 +138,18 @@ const Task: React.FC<TaskProps> = ({
               </div>
 
               {fields.map((subTask, index) => (
-                <div key={subTask.id} className="flex items-center mt-2">
-                  <input
-                    type="checkbox"
-                    checked={subTask.status === "COMPLETED"}
-                    onChange={(e) =>
-                      handleSubtaskStatusChange(subTask.id, e.target.checked)
-                    }
-                    className="checkbox mr-2"
-                  />
-
-                  {isEditOpen ? (
-                    <input
-                      defaultValue={subTask.title}
-                      type="text"
-                      className="input input-bordered h-8 w-full"
-                      {...register(`subTasks.${index}.title`)}
-                    />
-                  ) : (
-                    <span
-                      className={`${subTask.status === "COMPLETED" ? "line-through" : ""}`}
-                    >
-                      {subTask.title}
-                    </span>
-                  )}
-                </div>
+                <SubTaskInput
+                  key={subTask.id}
+                  checked={subTask.status === "COMPLETED"}
+                  register={register}
+                  fieldName={`subTasks.${index}.title`}
+                  isEdit={isEditOpen}
+                  defaultValue={subTask.title}
+                  className="mt-2"
+                  onChangeChecked={(e) =>
+                    handleSubtaskStatusChange(subTask.id, e.target.checked)
+                  }
+                />
               ))}
             </section>
           )}

@@ -59,9 +59,7 @@ function Tasks() {
 
     setTasks((prevTasks) =>
       prevTasks.map((prevTask) =>
-        prevTask.id === task.id
-          ? { ...resJson.data, uniqueKey: Date.now() }
-          : prevTask,
+        prevTask.id === task.id ? { ...resJson.data } : prevTask,
       ),
     );
   };
@@ -109,7 +107,7 @@ function Tasks() {
         </header>
         {tasks.map((task) => (
           <Task
-            key={`${task.id}-${task.uniqueKey || task.id}`}
+            key={task.id}
             task={task}
             handleRemoveTask={handleRemoveTask}
             handleSaveEditTask={handleSaveEditTask}
