@@ -3,7 +3,7 @@ import { TaskT } from "../lib/type";
 import { PRIORITIES } from "../lib/constants";
 import { useCookies } from "react-cookie";
 import { useFieldArray, useForm } from "react-hook-form";
-import SubTaskInput from "./SubTaskInput";
+import SubTask from "./SubTask";
 
 type TaskProps = {
   task: TaskT;
@@ -125,8 +125,8 @@ const Task: React.FC<TaskProps> = ({
             <p className="w-full text-[14px]">{task.description}</p>
           )}
 
-          {fields?.length >= 1 && (
-            <section className="w-full mt-2">
+          <section className="w-full mt-2">
+            {(fields?.length >= 1 || isEditOpen) && (
               <div className="flex items-center">
                 <h6 className="font-bold text-[16px] mr-2">Sub Tasks</h6>
                 {isEditOpen && (
@@ -138,23 +138,23 @@ const Task: React.FC<TaskProps> = ({
                   </button>
                 )}
               </div>
+            )}
 
-              {fields.map((subTask, index) => (
-                <SubTaskInput
-                  key={subTask.id}
-                  checked={subTask.status === "COMPLETED"}
-                  register={register}
-                  fieldName={`subTasks.${index}.title`}
-                  isEdit={isEditOpen}
-                  defaultValue={subTask.title}
-                  className="mt-2"
-                  onChangeChecked={(e) =>
-                    handleSubtaskStatusChange(subTask.id, e.target.checked)
-                  }
-                />
-              ))}
-            </section>
-          )}
+            {fields.map((subTask, index) => (
+              <SubTask
+                key={subTask.id}
+                checked={subTask.status === "COMPLETED"}
+                register={register}
+                fieldName={`subTasks.${index}.title`}
+                isEdit={isEditOpen}
+                defaultValue={subTask.title}
+                className="mt-2"
+                onChangeChecked={(e) =>
+                  handleSubtaskStatusChange(subTask.id, e.target.checked)
+                }
+              />
+            ))}
+          </section>
         </div>
 
         <section className="flex flex-row items-center gap-x-2 ml-4">

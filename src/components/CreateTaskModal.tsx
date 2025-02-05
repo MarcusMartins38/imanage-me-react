@@ -1,6 +1,6 @@
 import { TaskT } from "../lib/type";
 import { useFieldArray, useForm } from "react-hook-form";
-import SubTaskInput from "./SubTaskInput";
+import SubTask from "./SubTask";
 
 type CreateTaskModalProps = {
   handleSaveTask: (task: Omit<TaskT, "id">) => void;
@@ -103,7 +103,7 @@ export default function CreateTaskModal({
             </div>
 
             {fields.map((subTask, index) => (
-              <SubTaskInput
+              <SubTask
                 key={subTask.id}
                 fieldName={`subTasks.${index}.title`}
                 className="mt-2"

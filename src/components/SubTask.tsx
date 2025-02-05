@@ -13,7 +13,7 @@ type SubTaskProps = {
   onChangeChecked?: () => void;
 };
 
-export default function SubTaskInput({
+export default function SubTask({
   fieldName,
   defaultValue,
   register,
