@@ -82,7 +82,7 @@ const Task: React.FC<TaskProps> = ({
     setValue("subTasks", subTasks);
 
     const updatedTask = {
-      id: task.id,
+      ...task,
       title: getValues("title"),
       description: getValues("description"),
       subTasks: subTasks,
