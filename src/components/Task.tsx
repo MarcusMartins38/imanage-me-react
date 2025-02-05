@@ -92,6 +92,22 @@ const Task: React.FC<TaskProps> = ({
     setIsEditOpen(false);
   };
 
+  const handleRemoveSubTask = async (
+    subTaskIndex: number,
+    subTaskId?: string,
+  ) => {
+    const res = await fetch(`http://localhost:3333/api/task/${subTaskId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
+      },
+    });
+
+    if (!res.ok) throw new Error("Can't delete task");
+
+    remove(subTaskIndex);
+  };
+
   return (
     <div
       className="card bg-red-950 rounded-box h-min-20 h-auto place-items-center my-4 pt-2 pb-1"
@@ -149,6 +165,7 @@ const Task: React.FC<TaskProps> = ({
                 isEdit={isEditOpen}
                 defaultValue={subTask.title}
                 className="mt-2"
+                onRemoveClick={() => handleRemoveSubTask(index, subTask.id)}
                 onChangeChecked={(e) =>
                   handleSubtaskStatusChange(subTask.id, e.target.checked)
                 }
