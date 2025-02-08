@@ -9,6 +9,8 @@ export const uiSlice = createSlice({
   initialState,
   reducers: {
     changeTheme: (state, action) => {
+      localStorage.setItem("imanage-me-theme", action.payload.theme);
+
       return {
         ...state,
         theme: action.payload.theme,
