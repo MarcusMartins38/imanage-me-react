@@ -98,6 +98,10 @@ const Task: React.FC<TaskProps> = ({
     subTaskIndex: number,
     subTaskId?: string,
   ) => {
+    if (!subTaskId) {
+      return remove(subTaskIndex);
+    }
+
     const res = await fetch(`http://localhost:3333/api/task/${subTaskId}`, {
       method: "DELETE",
       headers: {
@@ -112,7 +116,7 @@ const Task: React.FC<TaskProps> = ({
 
   return (
     <div
-      className="card bg-red-950 rounded-box h-min-20 h-auto place-items-center my-4 pt-2 pb-1"
+      className="card bg-red-950 rounded-box h-min-20 h-auto place-items-center my-4 pt-2 pb-[0.1rem]"
       style={{ backgroundColor: PRIORITIES[task?.priority || 1].color }}
       {...rest}
     >
@@ -160,7 +164,7 @@ const Task: React.FC<TaskProps> = ({
 
             {fields.map((subTask, index) => (
               <SubTask
-                key={subTask.id}
+                key={subTask.id || `temp-${index}`}
                 checked={subTask.status === "COMPLETED"}
                 register={register}
                 fieldName={`subTasks.${index}.title`}
