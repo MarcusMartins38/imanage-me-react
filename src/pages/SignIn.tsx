@@ -49,7 +49,7 @@ function SignIn() {
   };
 
   const handleClickSubmit = async (data: SubmitSignInData) => {
-    const response = await fetch("http://localhost:3333/api/user/sign-in", {
+    const response = await fetch("http://localhost:3333/api/auth/sign-in", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -66,28 +66,25 @@ function SignIn() {
   };
 
   const handleGoogleLogin = async (credentialResponse: any) => {
-    const { credential: idToken } = credentialResponse;
+    let { credential: idToken } = credentialResponse;
 
     try {
-      const response = await fetch(
-        "http://localhost:3333/api/user/google-login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ idToken }),
-        },
-      );
+      const response = await fetch("http://localhost:3333/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken }),
+      });
 
       if (!response.ok) throw new Error("Google login failed");
       const resJson = await response.json();
       const { accessToken, user } = resJson.data;
 
+      setCookie("userAuth", { accessToken, user }, { path: "/" });
+
       saveLogedUser(accessToken, user);
       navigate("/tasks");
     } catch (error) {
-      console.error("Error logging in with Google:", error);
+      console.error("Error logging in with Google:", error.message);
     }
   };
 

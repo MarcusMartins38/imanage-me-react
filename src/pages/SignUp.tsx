@@ -32,7 +32,7 @@ function SignUp() {
   });
 
   const handleClickSubmit = async (data: SubmitSignUpData) => {
-    const res = await fetch("http://localhost:3333/api/user/sign-up", {
+    const res = await fetch("http://localhost:3333/api/auth/sign-up", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
