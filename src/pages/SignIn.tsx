@@ -36,7 +36,7 @@ function SignIn() {
       "userAuth",
       { accessToken: accessToken, user: user },
       {
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        expires: new Date(Date.now() + 60 * 60 * 1000),
       },
     );
     dispatch(

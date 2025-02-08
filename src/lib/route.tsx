@@ -3,12 +3,18 @@ import { useDispatch } from "react-redux";
 import { Navigate, Outlet } from "react-router";
 import { updateUser } from "../slices/userSlice";
 import { changeTheme } from "../slices/uiSlice";
+import { useAuthRefreshToken } from "./hook";
 
 export const AuthRoute = () => {
+  const { isRefreshing, hasAuth } = useAuthRefreshToken();
   const [cookie] = useCookies(["userAuth"]);
   const dispatch = useDispatch();
 
-  if (!cookie.userAuth?.accessToken) {
+  if (isRefreshing) {
+    return <div>Loading...</div>;
+  }
+
+  if (!hasAuth) {
     return <Navigate to={"/login"} />;
   }
 
