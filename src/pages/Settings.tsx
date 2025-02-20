@@ -12,7 +12,6 @@ const validationSchema = yup.object({
     .mixed()
     .nullable()
     .test("fileSize", "O arquivo é muito grande", (file) => {
-      console.log(file);
       return file[0] && file[0].size <= 3000000;
     }),
   name: yup.string().required(),
@@ -38,7 +37,6 @@ function Settings() {
 
     formData.append("name", data.name);
     formData.append("email", data.email);
-    console.log({ data });
 
     if (data.profileImageFile[0]) {
       formData.append("profileImageFile", data.profileImageFile[0]);
@@ -50,18 +48,13 @@ function Settings() {
       },
     });
 
-    if (response.ok) {
-      const result = await response.json();
-      dispatch(
-        updateUser({
-          imageUrl: result.user.imageUrl,
-          email: result.user.email,
-          name: result.user.name,
-        }),
-      );
-    } else {
-      console.log("Erro ao atualizar o perfil", result);
-    }
+    dispatch(
+      updateUser({
+        imageUrl: response.data.user.imageUrl,
+        email: response.data.user.email,
+        name: response.data.user.name,
+      }),
+    );
   };
 
   return (
