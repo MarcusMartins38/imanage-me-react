@@ -27,6 +27,7 @@ const Sidebar = () => {
   };
 
   const handleLogoutClick = () => {
+    const res = fetch("");
     dispatch(updateUser({ name: "", email: "", imageUrl: "" }));
     removeCookie("userAuth");
     navigate("/login");

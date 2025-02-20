@@ -8,6 +8,7 @@ import LoginImage from "../assets/login_side_image.webp";
 import { updateUser } from "../slices/userSlice";
 import { GoogleLogin } from "@react-oauth/google";
 import { UserT } from "../lib/type";
+import { api } from "../lib/api";
 
 type SubmitSignInData = {
   email: string;
@@ -49,17 +50,17 @@ function SignIn() {
   };
 
   const handleClickSubmit = async (data: SubmitSignInData) => {
-    const response = await fetch("http://localhost:3333/api/auth/sign-in", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await api.post(
+      "/auth/sign-in",
+      JSON.stringify({ email: data.email, password: data.password }),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-      body: JSON.stringify({ email: data.email, password: data.password }),
-    });
+    );
 
-    if (!response.ok) throw new Error("Request it's not ok");
-    const resJson = await response.json();
-    const { accessToken, user } = resJson.data;
+    const { accessToken, user } = response.data.data;
 
     saveLogedUser(accessToken, user);
     navigate("/tasks");
@@ -69,15 +70,15 @@ function SignIn() {
     let { credential: idToken } = credentialResponse;
 
     try {
-      const response = await fetch("http://localhost:3333/api/auth/google", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken }),
-      });
+      const response = await api.post(
+        "/auth/google",
+        JSON.stringify({ idToken }),
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+      );
 
-      if (!response.ok) throw new Error("Google login failed");
-      const resJson = await response.json();
-      const { accessToken, user } = resJson.data;
+      const { accessToken, user } = response.data.data;
 
       setCookie("userAuth", { accessToken, user }, { path: "/" });
 

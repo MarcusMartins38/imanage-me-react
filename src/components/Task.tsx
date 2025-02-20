@@ -6,6 +6,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import SubTask from "./SubTask";
 import EditIcon from "../assets/icons/EditIcon";
 import TrashIcon from "../assets/icons/TrashIcon";
+import { api } from "../lib/api";
 
 type TaskProps = {
   task: TaskT;
@@ -57,14 +58,16 @@ const Task: React.FC<TaskProps> = ({
     subTaskId: string,
     completed: boolean,
   ) => {
-    await fetch(`http://localhost:3333/api/task/${subTaskId}/status`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
-        "Content-Type": "application/json",
+    await api.patch(
+      `/task/${subTaskId}/status`,
+      JSON.stringify({ status: completed ? "COMPLETED" : "PENDING" }),
+      {
+        headers: {
+          Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
+          "Content-Type": "application/json",
+        },
       },
-      body: JSON.stringify({ status: completed ? "COMPLETED" : "PENDING" }),
-    });
+    );
 
     const updatedSubTasks = fields.map((subTask) =>
       subTask.id === subTaskId
@@ -102,8 +105,7 @@ const Task: React.FC<TaskProps> = ({
       return remove(subTaskIndex);
     }
 
-    const res = await fetch(`http://localhost:3333/api/task/${subTaskId}`, {
-      method: "DELETE",
+    const res = await api.delete(`/task/${subTaskId}`, {
       headers: {
         Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
       },

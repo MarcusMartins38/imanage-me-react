@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import Sidebar from "../components/Sidebar";
 import { updateUser } from "../slices/userSlice";
+import { api } from "../lib/api";
 
 const validationSchema = yup.object({
   profileImageFile: yup
@@ -43,12 +44,10 @@ function Settings() {
       formData.append("profileImageFile", data.profileImageFile[0]);
     }
 
-    const response = await fetch("http://localhost:3333/api/user/profile", {
-      method: "PUT",
+    const response = await api.put("/user/profile", formData, {
       headers: {
-        Authorization: `Bearer ${cookies.userAuth?.accessToken}`, // Inclua o token de autenticação
+        Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
       },
-      body: formData,
     });
 
     if (response.ok) {

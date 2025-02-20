@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router";
 import * as yup from "yup";
 import SignUpImage from "../assets/sign_up_side_image.png";
+import { api } from "../lib/api";
 
 type SubmitSignUpData = {
   username: string;
@@ -32,19 +33,23 @@ function SignUp() {
   });
 
   const handleClickSubmit = async (data: SubmitSignUpData) => {
-    const res = await fetch("http://localhost:3333/api/auth/sign-up", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: data.username,
-        email: data.email,
-        password: data.password,
-      }),
-    });
-
-    if (res.ok) navigate("/login");
+    await api
+      .post(
+        "/auth/sign-up",
+        JSON.stringify({
+          name: data.username,
+          email: data.email,
+          password: data.password,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      )
+      .then(() => {
+        navigate("/login");
+      });
   };
 
   return (

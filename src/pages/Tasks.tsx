@@ -6,6 +6,7 @@ import CreateTaskModal from "../components/CreateTaskModal";
 import Sidebar from "../components/Sidebar";
 import Task from "../components/Task";
 import { TaskT } from "../lib/type";
+import { api } from "../lib/api";
 
 function Tasks() {
   const [tasks, setTasks] = useState<TaskT | []>([]);
@@ -14,71 +15,61 @@ function Tasks() {
 
   useEffect(() => {
     const fetchUserTasks = async () => {
-      const res = await fetch("http://localhost:3333/api/task/", {
+      const res = await api.get("/task/", {
         headers: {
           Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
         },
       });
 
-      if (!res.ok) throw new Error("Get Tasks error");
-
-      const resJson = await res.json();
-      setTasks(resJson.data);
+      setTasks(res.data.data);
     };
 
     fetchUserTasks();
   }, []);
 
   const handleRemoveTask = async (id: string) => {
-    const res = await fetch(`http://localhost:3333/api/task/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
-      },
-    });
-
-    if (!res.ok) throw new Error("Can't delete task");
-    setTasks((prev) => [...prev.filter((task) => task.id !== id)]);
+    await api
+      .delete(`/task/${id}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
+        },
+      })
+      .then(() => {
+        setTasks((prev) => [...prev.filter((task) => task.id !== id)]);
+      });
   };
 
   const handleSaveEditTask = async (task: TaskT) => {
-    const res = await fetch(`http://localhost:3333/api/task/${task.id}`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    const res = await api.patch(
+      `/task/${task.id}`,
+      JSON.stringify({
         ...task,
       }),
-    });
-
-    if (!res.ok) throw new Error("Error while editing task");
-
-    const resJson = await res.json();
+      {
+        headers: {
+          Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
 
     setTasks((prevTasks) =>
       prevTasks.map((prevTask) =>
-        prevTask.id === task.id ? { ...resJson.data } : prevTask,
+        prevTask.id === task.id ? { ...res.data.data } : prevTask,
       ),
     );
   };
 
   const handleSaveClick = async (newTask: Omit<TaskT, "id">) => {
-    const res = await fetch("http://localhost:3333/api/task/", {
-      method: "POST",
+    const res = await api.post("/task/", JSON.stringify(newTask), {
       headers: {
         Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newTask),
     });
 
-    if (!res.ok) throw new Error("Can't create new task");
-
-    const resJson = await res.json();
     const { id, title, description, priority, category, subTasks } =
-      resJson.data;
+      res.data.data;
     const resNewTask = { id, title, description, priority, category, subTasks };
 
     setTasks((prev) => [resNewTask, ...prev]);
