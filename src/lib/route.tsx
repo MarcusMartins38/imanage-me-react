@@ -4,7 +4,7 @@ import { resetUser, updateUser } from "../redux/slices/userSlice";
 import { api } from "./api";
 import { useEffect, useState } from "react";
 
-export const AuthRoute = () => {
+export const AuthRoute = ({ Unauth = false }) => {
     const user = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
@@ -35,16 +35,9 @@ export const AuthRoute = () => {
         return <span>Loading...</span>;
     }
 
-    return user.email ? <Outlet /> : <Navigate to={"/login"} />;
-};
-
-export const UnauthRoute = () => {
-    const user = useSelector((state: RootState) => state.user);
-    api.get("/user/me").then((data) => console.log({ data }));
-
-    if (user.email) {
-        return <Navigate to={"/tasks"} />;
+    if (Unauth) {
+        return !user.email ? <Outlet /> : <Navigate to={"/tasks"} />;
     }
 
-    return <Outlet />;
+    return user.email ? <Outlet /> : <Navigate to={"/login"} />;
 };
