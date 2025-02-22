@@ -1,11 +1,10 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router";
 import * as yup from "yup";
 import LoginImage from "../assets/login_side_image.webp";
-import { updateUser } from "../slices/userSlice";
+import { updateUser } from "../redux/slices/userSlice";
 import { GoogleLogin } from "@react-oauth/google";
 import { UserT } from "../lib/type";
 import { api } from "../lib/api";
@@ -22,7 +21,6 @@ const validationSchema = yup.object({
 
 function SignIn() {
   const dispatch = useDispatch();
-  const [_, setCookie] = useCookies(["userAuth"]);
   const navigate = useNavigate();
   const {
     register,
@@ -32,14 +30,7 @@ function SignIn() {
     resolver: yupResolver(validationSchema),
   });
 
-  const saveLogedUser = (accessToken: string, user: UserT) => {
-    setCookie(
-      "userAuth",
-      { accessToken: accessToken, user: user },
-      {
-        expires: new Date(Date.now() + 60 * 60 * 1000),
-      },
-    );
+  const saveLogedUser = (user: UserT) => {
     dispatch(
       updateUser({
         name: user.name,
@@ -60,9 +51,9 @@ function SignIn() {
       },
     );
 
-    const { accessToken, user } = response.data.data;
+    const { user } = response.data.data;
 
-    saveLogedUser(accessToken, user);
+    saveLogedUser(user);
     navigate("/tasks");
   };
 
@@ -78,11 +69,9 @@ function SignIn() {
         },
       );
 
-      const { accessToken, user } = response.data.data;
+      const { user } = response.data.data;
 
-      setCookie("userAuth", { accessToken, user }, { path: "/" });
-
-      saveLogedUser(accessToken, user);
+      saveLogedUser(user);
       navigate("/tasks");
     } catch (error) {
       console.error("Error logging in with Google:", error.message);

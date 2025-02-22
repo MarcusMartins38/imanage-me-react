@@ -62,8 +62,8 @@ const Task: React.FC<TaskProps> = ({
       `/task/${subTaskId}/status`,
       JSON.stringify({ status: completed ? "COMPLETED" : "PENDING" }),
       {
+        withCredentials: true,
         headers: {
-          Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
           "Content-Type": "application/json",
         },
       },
@@ -106,9 +106,7 @@ const Task: React.FC<TaskProps> = ({
     }
 
     const res = await api.delete(`/task/${subTaskId}`, {
-      headers: {
-        Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
-      },
+      withCredentials: true,
     });
 
     if (!res.ok) throw new Error("Can't delete task");

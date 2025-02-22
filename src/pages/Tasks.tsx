@@ -15,11 +15,7 @@ function Tasks() {
 
   useEffect(() => {
     const fetchUserTasks = async () => {
-      const res = await api.get("/task/", {
-        headers: {
-          Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
-        },
-      });
+      const res = await api.get("/task/");
 
       setTasks(res.data.data);
     };
@@ -44,13 +40,7 @@ function Tasks() {
       `/task/${task.id}`,
       JSON.stringify({
         ...task,
-      }),
-      {
-        headers: {
-          Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
-          "Content-Type": "application/json",
-        },
-      },
+      })
     );
 
     setTasks((prevTasks) =>
@@ -63,7 +53,6 @@ function Tasks() {
   const handleSaveClick = async (newTask: Omit<TaskT, "id">) => {
     const res = await api.post("/task/", JSON.stringify(newTask), {
       headers: {
-        Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
         "Content-Type": "application/json",
       },
     });

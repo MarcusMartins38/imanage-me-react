@@ -1,10 +1,9 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import Sidebar from "../components/Sidebar";
-import { updateUser } from "../slices/userSlice";
+import { updateUser } from "../redux/slices/userSlice";
 import { api } from "../lib/api";
 
 const validationSchema = yup.object({
@@ -21,7 +20,6 @@ const validationSchema = yup.object({
 function Settings() {
   const isOpen = useSelector((state) => state.sidebar.isOpen);
   const user = useSelector((state) => state.user);
-  const [cookies] = useCookies(["userAuth"]);
   const dispatch = useDispatch();
 
   const {
@@ -43,8 +41,9 @@ function Settings() {
     }
 
     const response = await api.put("/user/profile", formData, {
+      withCredentials: true,
       headers: {
-        Authorization: `Bearer ${cookies.userAuth?.accessToken}`,
+        "Content-Type": "application/json",
       },
     });
 
