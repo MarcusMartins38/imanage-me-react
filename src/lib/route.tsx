@@ -3,6 +3,7 @@ import { Navigate, Outlet } from "react-router";
 import { resetUser, updateUser } from "../redux/slices/userSlice";
 import { api } from "./api";
 import { useEffect, useState } from "react";
+import { RootState } from "../redux/store";
 
 export const AuthRoute = ({ Unauth = false }) => {
     const user = useSelector((state: RootState) => state.user);
