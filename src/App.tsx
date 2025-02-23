@@ -6,6 +6,7 @@ import Settings from "./pages/Settings";
 import { AuthRoute } from "./lib/route";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AboutMe from "./pages/AboutMe";
+import AuthLayout from "./layouts/AuthLayout";
 
 const queryClient = new QueryClient();
 
@@ -21,9 +22,11 @@ function App() {
                     </Route>
 
                     <Route element={<AuthRoute />}>
-                        <Route path="/tasks" element={<Tasks />} />
-                        <Route path="/about" element={<AboutMe />} />
-                        <Route path="/settings" element={<Settings />} />
+                        <Route element={<AuthLayout />}>
+                            <Route path="/tasks" element={<Tasks />} />
+                            <Route path="/about" element={<AboutMe />} />
+                            <Route path="/settings" element={<Settings />} />
+                        </Route>
                     </Route>
                 </Routes>
             </QueryClientProvider>

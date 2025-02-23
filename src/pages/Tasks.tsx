@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import CreateTaskModal from "../components/CreateTaskModal";
-import Sidebar from "../components/Sidebar";
 import Task from "../components/Task";
 import { TaskT } from "../lib/type";
 import { api } from "../lib/api";
-import { RootState } from "../redux/store";
 
 function Tasks() {
     const [tasks, setTasks] = useState<TaskT | []>([]);
     const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-    const isSidebarOpen = useSelector(
-        (state: RootState) => state.sidebar.isOpen,
-    );
 
     useEffect(() => {
         const fetchUserTasks = async () => {
@@ -50,18 +44,8 @@ function Tasks() {
     };
 
     return (
-        <main>
-            <Sidebar />
-
-            <div
-                className={`p-4 transition-all duration-300`}
-                style={{
-                    width: isSidebarOpen
-                        ? `calc(100% - 256px)`
-                        : `calc(100% - 64px)`,
-                    marginLeft: isSidebarOpen ? "256px" : "64px",
-                }}
-            >
+        <>
+            <div className={`p-4 transition-all duration-300`}>
                 <header className="flex items-center justify-end w-full">
                     <button
                         className="btn bg-zinc-800 text-white hover:bg-zinc-600"
@@ -85,7 +69,7 @@ function Tasks() {
                 setIsOpen={setIsTaskModalOpen}
                 handleSaveTask={handleSaveClick}
             />
-        </main>
+        </>
     );
 }
 

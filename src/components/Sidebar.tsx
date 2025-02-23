@@ -1,4 +1,3 @@
-import { RootState } from "@reduxjs/toolkit/query";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router";
 import { closeSidebar, openSidebar } from "../redux/slices/sidebarSlice";
@@ -12,6 +11,7 @@ import ArrowLeft from "../assets/icons/ArrowLeft";
 import LogoutIcon from "../assets/icons/LogoutIcon";
 import LightThemeIcon from "../assets/icons/LightThemeIcon";
 import DarkThemeIcon from "../assets/icons/DarkThemeIcon";
+import { RootState } from "../redux/store";
 
 const Sidebar = () => {
     const isOpen = useSelector((state: RootState) => state.sidebar.isOpen);
