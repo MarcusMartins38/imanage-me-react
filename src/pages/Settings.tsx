@@ -4,6 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import { updateUser } from "../redux/slices/userSlice";
 import { api } from "../lib/api";
+import { UserT } from "../lib/type";
+import { RootState } from "../redux/store";
+
+type EditedUserSaveT = Omit<UserT, "id"> & {
+    profileImageFile: File[];
+};
 
 const validationSchema = yup.object({
     profileImageFile: yup
@@ -17,7 +23,7 @@ const validationSchema = yup.object({
 });
 
 function Settings() {
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch();
 
     const {
@@ -28,7 +34,7 @@ function Settings() {
         resolver: yupResolver(validationSchema),
     });
 
-    const handleClickSave = async (data) => {
+    const handleClickSave = async (data: EditedUserSaveT) => {
         const formData = new FormData();
 
         formData.append("name", data.name);

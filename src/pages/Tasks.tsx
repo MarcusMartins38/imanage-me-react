@@ -5,7 +5,7 @@ import { TaskT } from "../lib/type";
 import { api } from "../lib/api";
 
 function Tasks() {
-    const [tasks, setTasks] = useState<TaskT | []>([]);
+    const [tasks, setTasks] = useState<TaskT[] | []>([]);
     const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 
     useEffect(() => {
@@ -54,7 +54,7 @@ function Tasks() {
                         Create Task
                     </button>
                 </header>
-                {tasks.map((task) => (
+                {tasks.map((task: TaskT) => (
                     <Task
                         key={task.id}
                         task={task}
