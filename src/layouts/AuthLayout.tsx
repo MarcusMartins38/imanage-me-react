@@ -12,6 +12,7 @@ const AuthLayout = () => {
         <>
             <Sidebar />
             <main
+                className="transition-all duration-300"
                 style={{
                     width: isSidebarOpen
                         ? `calc(100% - 256px)`
