@@ -1,4 +1,6 @@
 import AboutMeBackground from "../assets/hacker_bro.png";
+import GithubIcon from "../assets/icons/GithubIcon";
+import LinkedinIcon from "../assets/icons/LinkedinIcon";
 import MarcusProfile from "../assets/marcus_profile.jpg";
 
 export default function AboutMe() {
@@ -12,6 +14,22 @@ export default function AboutMe() {
                         I'm a Software Engineer with a degree in Computer
                         Science, specializing in React and TypeScript.
                     </p>
+                    <div className="flex flex-row items-center">
+                        <a
+                            className="hover:opacity-80 transition-all duration-300 mr-1"
+                            target="_blank"
+                            href="https://www.linkedin.com/in/marcus-martins-software-engineer/?locale=en_US"
+                        >
+                            <LinkedinIcon />
+                        </a>
+                        <a
+                            className="hover:opacity-80 transition-all duration-300"
+                            target="_blank"
+                            href="https://github.com/MarcusMartins38"
+                        >
+                            <GithubIcon />
+                        </a>
+                    </div>
                 </div>
                 <img src={AboutMeBackground} alt="" className="w-[30rem]" />
             </section>
