@@ -1,5 +1,4 @@
 import { RootState } from "@reduxjs/toolkit/query";
-import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router";
 import { closeSidebar, openSidebar } from "../redux/slices/sidebarSlice";
@@ -19,7 +18,6 @@ const Sidebar = () => {
     const theme = useSelector((state: RootState) => state.ui.theme);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [_, __, removeCookie] = useCookies(["userAuth"]);
 
     useEffect(() => {
         document.documentElement.setAttribute("data-theme", theme);
