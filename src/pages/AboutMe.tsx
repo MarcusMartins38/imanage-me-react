@@ -4,6 +4,10 @@ import GithubIcon from "../assets/icons/GithubIcon";
 import LinkedinIcon from "../assets/icons/LinkedinIcon";
 import MarcusProfile from "../assets/marcus_profile.jpg";
 import { RootState } from "../redux/store";
+import InfoCard from "../components/InfoCard";
+import ComputerIcon from "../assets/icons/ComputerIcon";
+import ReactIcon from "../assets/icons/ReactIcon";
+import NodeIcon from "../assets/icons/NodeIcon";
 
 export default function AboutMe() {
     const theme = useSelector((state: RootState) => state.ui.theme);
@@ -13,8 +17,12 @@ export default function AboutMe() {
         <main className="m-auto max-w-screen-lg px-4">
             <section className="flex items-center mb-8">
                 <div className="px-10 w-full flex flex-col gap-2">
-                    <h4 className="font-bold text-[18px]">Hello, I am</h4>
-                    <h2 className="font-bold text-[32px]">Marcus Martins</h2>
+                    <h4 className="font-bold text-[18px] text-[#FFA688]">
+                        Hello, I am
+                    </h4>
+                    <h2 className="font-bold text-[32px] text-[#FFA688]">
+                        Marcus Martins
+                    </h2>
                     <p>
                         I'm a Software Engineer with a degree in Computer
                         Science, specializing in React and TypeScript.
@@ -52,7 +60,9 @@ export default function AboutMe() {
                     className="w-[20rem] rounded-full"
                 />
                 <div className="flex flex-col gap-4 px-10 max-w-xl">
-                    <h2 className="font-bold text-[32px]">About Me</h2>
+                    <h2 className="font-bold text-[32px] text-[#FFA688]">
+                        About Me
+                    </h2>
                     <p>
                         I'm a Software Engineer with a strong focus on React.js
                         and Typescript. I have a passion for creating beautiful
@@ -70,6 +80,36 @@ export default function AboutMe() {
                         we face daily is not a problem for me.
                     </p>
                 </div>
+            </section>
+
+            <section className="flex flex-row items-center justify-between my-24">
+                <InfoCard
+                    svg={<ComputerIcon size={100} />}
+                    title="Computer Science"
+                    description="I graduated in early 2023. By then, I was already
+                        working as a Software Engineer. My graduation was
+                        slightly delayed due to the pandemic."
+                />
+
+                <InfoCard
+                    color="#00D8FF"
+                    svg={<ReactIcon size={100} />}
+                    title="Web Development"
+                    description="My specialty is Frontend development, and I love working
+                        with React. I've been using it with TypeScript for over
+                        four years, and want to learn and improve more my
+                        skills."
+                />
+
+                <InfoCard
+                    color="#6cc24a"
+                    svg={<NodeIcon size={100} />}
+                    title="FullStack"
+                    description="A big part of my experience also involves backend
+                        development, strengthening my adaptability. I love the
+                        JavaScript/TypeScript ecosystem, so working on the
+                        backend is no problem for me."
+                />
             </section>
         </main>
     );
