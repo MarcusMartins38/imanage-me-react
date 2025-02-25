@@ -11,7 +11,6 @@ import NodeIcon from "../assets/icons/NodeIcon";
 
 export default function AboutMe() {
     const theme = useSelector((state: RootState) => state.ui.theme);
-    console.log(theme);
 
     return (
         <main className="m-auto max-w-screen-lg px-4">
