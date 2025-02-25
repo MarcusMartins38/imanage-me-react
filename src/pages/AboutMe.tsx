@@ -20,14 +20,17 @@ export default function AboutMe() {
                             target="_blank"
                             href="https://www.linkedin.com/in/marcus-martins-software-engineer/?locale=en_US"
                         >
-                            <LinkedinIcon />
+                            <LinkedinIcon
+                                size={32}
+                                className="text-[#71b7fb]"
+                            />
                         </a>
                         <a
                             className="hover:opacity-80 transition-all duration-300"
                             target="_blank"
                             href="https://github.com/MarcusMartins38"
                         >
-                            <GithubIcon />
+                            <GithubIcon size={32} className="text-[#f0f6fc]" />
                         </a>
                     </div>
                 </div>

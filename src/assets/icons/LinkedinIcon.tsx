@@ -1,16 +1,16 @@
-export default function LinkedinIcon() {
+export default function LinkedinIcon({ size = 24, className = "" }) {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width={size}
+            height={size}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="icon icon-tabler icons-tabler-outline icon-tabler-brand-linkedin"
+            className={`icon icon-tabler icons-tabler-outline icon-tabler-brand-linkedin ${className}`}
         >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M8 11v5" />
