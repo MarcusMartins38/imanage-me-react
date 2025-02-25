@@ -62,7 +62,7 @@ function Settings() {
 
     return (
         <div
-            className={`p-4 transition-all duration-300 flex items-center justify-center`}
+            className={`max-w-[1440px] m-auto p-4 transition-all duration-300 flex items-center justify-center`}
         >
             <form
                 onSubmit={handleSubmit(handleClickSave)}
