@@ -1,9 +1,14 @@
+import { useSelector } from "react-redux";
 import AboutMeBackground from "../assets/hacker_bro.png";
 import GithubIcon from "../assets/icons/GithubIcon";
 import LinkedinIcon from "../assets/icons/LinkedinIcon";
 import MarcusProfile from "../assets/marcus_profile.jpg";
+import { RootState } from "../redux/store";
 
 export default function AboutMe() {
+    const theme = useSelector((state: RootState) => state.ui.theme);
+    console.log(theme);
+
     return (
         <main className="m-auto max-w-screen-lg px-4">
             <section className="flex items-center mb-8">
@@ -22,7 +27,7 @@ export default function AboutMe() {
                         >
                             <LinkedinIcon
                                 size={32}
-                                className="text-[#71b7fb]"
+                                className={`${theme === "dark" ? "text-[#71b7fb]" : "text-[#0E73AA]"}`}
                             />
                         </a>
                         <a
@@ -30,7 +35,10 @@ export default function AboutMe() {
                             target="_blank"
                             href="https://github.com/MarcusMartins38"
                         >
-                            <GithubIcon size={32} className="text-[#f0f6fc]" />
+                            <GithubIcon
+                                size={32}
+                                className={`${theme === "dark" ? "text-[#f0f6fc]" : "text-[#2C2C3A]"}`}
+                            />
                         </a>
                     </div>
                 </div>
