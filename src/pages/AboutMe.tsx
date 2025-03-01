@@ -8,13 +8,14 @@ import InfoCard from "../components/InfoCard";
 import ComputerIcon from "../assets/icons/ComputerIcon";
 import ReactIcon from "../assets/icons/ReactIcon";
 import NodeIcon from "../assets/icons/NodeIcon";
+import AdviceMessage from "../components/AdviceMessage";
 
 export default function AboutMe() {
     const theme = useSelector((state: RootState) => state.ui.theme);
 
     return (
-        <main className="m-auto max-w-screen-lg px-4">
-            <section className="flex items-center mb-8">
+        <main className="m-auto max-w-screen-lg px-4 py-8">
+            <section className="flex flex-col lg:flex-row items-center mb-8">
                 <div className="px-10 w-full flex flex-col gap-2">
                     <h4 className="font-bold text-[18px] text-[#FFA688]">
                         Hello, I am
@@ -52,7 +53,7 @@ export default function AboutMe() {
                 <img src={AboutMeBackground} alt="" className="w-[30rem]" />
             </section>
 
-            <section className="flex items-center">
+            <section className="flex flex-col-reverse lg:flex-row items-center">
                 <img
                     src={MarcusProfile}
                     alt="Owner Profile"
@@ -81,8 +82,9 @@ export default function AboutMe() {
                 </div>
             </section>
 
-            <section className="flex flex-row items-center justify-between my-24">
+            <section className="flex flex-col lg:flex-row items-center justify-between lg:my-24">
                 <InfoCard
+                    className="my-6 lg:my-0 max-w-80"
                     svg={<ComputerIcon size={100} />}
                     title="Computer Science"
                     description="I graduated in early 2023. By then, I was already
@@ -91,6 +93,7 @@ export default function AboutMe() {
                 />
 
                 <InfoCard
+                    className="my-6 lg:my-0 max-w-80"
                     color="#00D8FF"
                     svg={<ReactIcon size={100} />}
                     title="Web Development"
@@ -101,6 +104,7 @@ export default function AboutMe() {
                 />
 
                 <InfoCard
+                    className="my-6 lg:my-0 max-w-80"
                     color="#6cc24a"
                     svg={<NodeIcon size={100} />}
                     title="FullStack"
@@ -110,6 +114,8 @@ export default function AboutMe() {
                         backend is no problem for me."
                 />
             </section>
+
+            <AdviceMessage className="m-auto w-auto" />
         </main>
     );
 }

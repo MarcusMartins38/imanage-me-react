@@ -1,10 +1,12 @@
 import React from "react";
+import { cn } from "../lib/utils";
 
 type InfoCardProps = {
     svg: React.ReactNode;
     title: string;
     description: string;
     color?: string;
+    className?: string;
 };
 
 export default function InfoCard({
@@ -12,10 +14,14 @@ export default function InfoCard({
     title,
     description,
     color = "#FFA688",
+    className = "",
 }: InfoCardProps) {
     return (
         <div
-            className={`w-72 h-96 flex flex-col items-center justify-center p-4 border border-solid border-4 border-[${color}] rounded-lg`}
+            className={cn(
+                `h-96 flex flex-col items-center justify-center p-4 border border-solid border-4 border-[${color}] rounded-lg`,
+                className,
+            )}
         >
             {svg}
 
