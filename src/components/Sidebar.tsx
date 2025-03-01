@@ -12,6 +12,7 @@ import LogoutIcon from "../assets/icons/LogoutIcon";
 import LightThemeIcon from "../assets/icons/LightThemeIcon";
 import DarkThemeIcon from "../assets/icons/DarkThemeIcon";
 import { RootState } from "../redux/store";
+import { api } from "../lib/api";
 
 const Sidebar = () => {
     const isOpen = useSelector((state: RootState) => state.sidebar.isOpen);
@@ -31,9 +32,14 @@ const Sidebar = () => {
         }
     };
 
-    const handleLogoutClick = () => {
-        dispatch(updateUser({ name: "", email: "", imageUrl: "" }));
-        navigate("/login");
+    const handleLogoutClick = async () => {
+        await api
+            .post("/auth/logout")
+            .then(() => {
+                dispatch(updateUser({ name: "", email: "", imageUrl: "" }));
+                navigate("/login");
+            })
+            .catch((error) => console.error(error));
     };
 
     const handleThemeToggle = () => {
