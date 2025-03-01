@@ -135,7 +135,7 @@ const Task: React.FC<TaskProps> = ({
 
                             <select
                                 className="select select-bordered select-sm w-full max-w-40 ml-4"
-                                defaultValue={3}
+                                defaultValue={task.priority}
                                 {...register("priority")}
                             >
                                 <option value={1}>Very Low</option>
