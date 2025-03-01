@@ -36,6 +36,7 @@ const Task: React.FC<TaskProps> = ({
         setIsEditOpen(false);
         setValue("description", task.description); // Reset the form values
         setValue("title", task.title); // Reset the form title
+        setValue("priority", task.priority); // Reset the form title
         setValue("subTasks", task.subTasks);
     };
 
@@ -88,6 +89,7 @@ const Task: React.FC<TaskProps> = ({
             ...task,
             title: getValues("title"),
             description: getValues("description"),
+            priority: getValues("priority"),
             subTasks: subTasks,
         };
 
@@ -121,14 +123,28 @@ const Task: React.FC<TaskProps> = ({
             <div className="w-full h-full px-4 py-2 flex flex-row bg-base-200 rounded-box">
                 <div className="flex flex-col items-center justify-start w-full">
                     {isEditOpen ? (
-                        <input
-                            type="text"
-                            id="title"
-                            className="input input-bordered h-8 w-full mb-2"
-                            onKeyDown={(e) => handleKeyDown(e, task)}
-                            {...register("title")}
-                            defaultValue={task.title}
-                        />
+                        <div className="flex flex-row w-full">
+                            <input
+                                type="text"
+                                id="title"
+                                className="input input-bordered h-8 w-full mb-2"
+                                onKeyDown={(e) => handleKeyDown(e, task)}
+                                {...register("title")}
+                                defaultValue={task.title}
+                            />
+
+                            <select
+                                className="select select-bordered select-sm w-full max-w-40 ml-4"
+                                defaultValue={3}
+                                {...register("priority")}
+                            >
+                                <option value={1}>Very Low</option>
+                                <option value={2}>Low</option>
+                                <option value={3}>Medium</option>
+                                <option value={4}>High</option>
+                                <option value={5}>VeryHigh</option>
+                            </select>
+                        </div>
                     ) : (
                         <h5 className="w-full text-[20px] font-bold">
                             {task.title}
