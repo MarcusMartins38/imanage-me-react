@@ -34,7 +34,7 @@ const Sidebar = () => {
 
     const handleLogoutClick = async () => {
         await api
-            .post("/auth/logout")
+            .get("/auth/logout")
             .then(() => {
                 dispatch(updateUser({ name: "", email: "", imageUrl: "" }));
                 navigate("/login");
