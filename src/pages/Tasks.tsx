@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import CreateTaskModal from "../components/CreateTaskModal";
-import Task from "../components/Task";
+import Task from "../components/Task/Task";
 import { TaskT } from "../lib/type";
 import { api } from "../lib/api";
 

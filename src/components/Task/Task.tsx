@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import { TaskT } from "../lib/type";
-import { PRIORITIES } from "../lib/constants";
-import { useFieldArray, useForm } from "react-hook-form";
-import SubTask from "./SubTask";
-import EditIcon from "../assets/icons/EditIcon";
-import TrashIcon from "../assets/icons/TrashIcon";
-import { api } from "../lib/api";
+import React from "react";
+import { TaskT } from "../../lib/type";
+import { PRIORITIES } from "../../lib/constants";
+import SubTask from "../SubTask";
+import EditIcon from "../../assets/icons/EditIcon";
+import TrashIcon from "../../assets/icons/TrashIcon";
+import { useTaskForm } from "./useTaskForm";
 
 type TaskProps = {
     task: TaskT;
@@ -19,26 +18,17 @@ const Task: React.FC<TaskProps> = ({
     handleRemoveTask,
     ...rest
 }) => {
-    const [isEditOpen, setIsEditOpen] = useState(false);
-
-    const { register, control, getValues, setValue } = useForm({
-        defaultValues: {
-            subTasks: task.subTasks,
-        },
-    });
-    const { fields, append, remove } = useFieldArray({
-        control,
-        name: "subTasks",
-        keyName: "_id",
-    });
-
-    const handleCancelEdit = () => {
-        setIsEditOpen(false);
-        setValue("description", task.description); // Reset the form values
-        setValue("title", task.title); // Reset the form title
-        setValue("priority", task.priority); // Reset the form title
-        setValue("subTasks", task.subTasks);
-    };
+    const {
+        isEditOpen,
+        setIsEditOpen,
+        fields,
+        register,
+        append,
+        handleClickSaveEdit,
+        handleCancelEdit,
+        handleRemoveSubTask,
+        handleSubtaskStatusChange,
+    } = useTaskForm(task, handleSaveEditTask);
 
     const handleKeyDown = (
         event: React.KeyboardEvent<HTMLTextAreaElement>,
@@ -51,67 +41,6 @@ const Task: React.FC<TaskProps> = ({
             event.preventDefault();
             handleCancelEdit();
         }
-    };
-
-    const handleSubtaskStatusChange = async (
-        subTaskId: string,
-        completed: boolean,
-    ) => {
-        await api.patch(
-            `/task/${subTaskId}/status`,
-            JSON.stringify({ status: completed ? "COMPLETED" : "PENDING" }),
-            {
-                withCredentials: true,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            },
-        );
-
-        const updatedSubTasks = fields.map((subTask) =>
-            subTask.id === subTaskId
-                ? { ...subTask, status: completed ? "COMPLETED" : "PENDING" }
-                : subTask,
-        );
-        setValue("subTasks", updatedSubTasks);
-    };
-
-    const handleClickSaveEdit = (task: TaskT) => {
-        const subTasks = getValues("subTasks").map((subTask: any) => ({
-            id: subTask?.id || null,
-            title: subTask.title,
-            parentTaskId: task.id,
-        }));
-
-        setValue("subTasks", subTasks);
-
-        const updatedTask = {
-            ...task,
-            title: getValues("title"),
-            description: getValues("description"),
-            priority: getValues("priority"),
-            subTasks: subTasks,
-        };
-
-        handleSaveEditTask(updatedTask);
-        setIsEditOpen(false);
-    };
-
-    const handleRemoveSubTask = async (
-        subTaskIndex: number,
-        subTaskId?: string,
-    ) => {
-        if (!subTaskId) {
-            return remove(subTaskIndex);
-        }
-
-        const res = await api.delete(`/task/${subTaskId}`, {
-            withCredentials: true,
-        });
-
-        if (!res.ok) throw new Error("Can't delete task");
-
-        remove(subTaskIndex);
     };
 
     return (
@@ -175,6 +104,8 @@ const Task: React.FC<TaskProps> = ({
                                             append({
                                                 parentTaskId: task.id,
                                                 title: "",
+                                                priority: 3,
+                                                createdAt: "",
                                             })
                                         }
                                         className="btn bg-green-500 text-white hover:bg-green-600 min-h-0 min-w-0 p-0 h-6 w-6"
