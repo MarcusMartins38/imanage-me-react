@@ -44,10 +44,12 @@ const Task: React.FC<TaskProps> = ({
         }
     };
 
+    const taskPriorityColor = PRIORITIES[task?.priority || 1].color;
+
     return (
         <div
             className="card bg-red-950 rounded-box h-min-20 h-auto place-items-center my-4 pt-2 pb-[0.1rem]"
-            style={{ backgroundColor: PRIORITIES[task?.priority || 1].color }}
+            style={{ backgroundColor: taskPriorityColor }}
             {...rest}
         >
             <div className="w-full h-full px-4 py-2 flex flex-row bg-base-200 rounded-box">
