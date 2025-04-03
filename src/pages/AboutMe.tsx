@@ -15,7 +15,10 @@ export default function AboutMe() {
 
     return (
         <main className="m-auto max-w-screen-lg px-4 py-8">
-            <section className="flex flex-col lg:flex-row items-center mb-8">
+            <section
+                className="flex flex-col lg:flex-row items-center mb-8"
+                data-testid="aboutme-introduction-testid"
+            >
                 <div className="px-10 w-full flex flex-col gap-2">
                     <h4 className="font-bold text-[18px] text-[#FFA688]">
                         Hello, I am

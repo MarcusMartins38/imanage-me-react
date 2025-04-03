@@ -6,26 +6,26 @@ import userReducer from "./slices/userSlice";
 import uiReducer from "./slices/uiSlice";
 
 const persistConfig = {
-  key: "root",
-  storage,
+    key: "root",
+    storage,
 };
 
 const rootReducer = combineReducers({
-  sidebar: sidebarReducer,
-  user: userReducer,
-  ui: uiReducer,
+    sidebar: sidebarReducer,
+    user: userReducer,
+    ui: uiReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
-  devTools: import.meta.env.NODE_ENV !== "production",
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
-      },
-    }),
+    //   devTools: import.meta.env.NODE_ENV !== "production",
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+            },
+        }),
 });
 
 export const persistor = persistStore(store);
