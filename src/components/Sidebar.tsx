@@ -13,6 +13,7 @@ import LightThemeIcon from "../assets/icons/LightThemeIcon";
 import DarkThemeIcon from "../assets/icons/DarkThemeIcon";
 import { RootState } from "../redux/store";
 import { api } from "../lib/api";
+import CalendarIcon from "../assets/icons/CalendarIcon";
 
 const Sidebar = () => {
     const isOpen = useSelector((state: RootState) => state.sidebar.isOpen);
@@ -73,6 +74,14 @@ const Sidebar = () => {
                         >
                             <TaskIcon isOpen={isOpen} />
                             {isOpen && <span>Tasks</span>}
+                        </NavLink>
+
+                        <NavLink
+                            to="/calendar"
+                            className="menu-item flex items-center w-full h-10 rounded-lg px-1 transition-all duration-300 hover:bg-base-300"
+                        >
+                            <CalendarIcon isOpen={isOpen} />
+                            {isOpen && <span>Calendar</span>}
                         </NavLink>
 
                         <NavLink
